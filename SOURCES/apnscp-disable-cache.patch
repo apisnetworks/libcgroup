@@ -1,0 +1,50 @@
+diff --git a/README.md b/README.md
+new file mode 100644
+index 0000000..b92d3c6
+--- /dev/null
++++ b/README.md
+@@ -0,0 +1,5 @@
++libcgroup is a library that abstracts the control group file system in Linux. 
++
++This fork disables caching that is problematic with the pivot root structure of apnscp. 
++Specifically each root has its own passwd exposed to libcgroup upon successful PAM authentication
++leading to a mixture of passwd files.
+diff --git a/src/api.c b/src/api.c
+index bfd0177..88cdbd5 100644
+--- a/src/api.c
++++ b/src/api.c
+@@ -3126,7 +3126,7 @@ int cgroup_change_all_cgroups(void)
+ 			continue;
+ 
+ 		err = cgroup_change_cgroup_flags(euid,
+-				egid, procname, pid, CGFLAG_USECACHE);
++				egid, procname, pid, 0);
+ 		if (err)
+ 			cgroup_dbg("cgroup change pid %i failed\n", pid);
+ 
+diff --git a/src/daemon/cgrulesengd.c b/src/daemon/cgrulesengd.c
+index 367b898..5925330 100644
+--- a/src/daemon/cgrulesengd.c
++++ b/src/daemon/cgrulesengd.c
+@@ -472,7 +472,7 @@ int cgre_process_event(const struct proc_event *ev, const int type)
+ 		break;
+ 	}
+ 	ret = cgroup_change_cgroup_flags(euid, egid, procname, pid,
+-						 CGFLAG_USECACHE);
++						 0);
+ 	if ((ret == ECGOTHER) && (errno == ESRCH)) {
+ 		/* A process finished already and that is not a problem. */
+ 		ret = 0;
+diff --git a/src/pam/pam_cgroup.c b/src/pam/pam_cgroup.c
+index 1d78b81..2d43cb1 100644
+--- a/src/pam/pam_cgroup.c
++++ b/src/pam/pam_cgroup.c
+@@ -138,7 +138,7 @@ PAM_EXTERN int pam_sm_open_session(pam_handle_t *pamh, int flags,
+ 	 * under what egid service will be provided?
+ 	 */
+ 	ret = cgroup_change_cgroup_uid_gid_flags(pwd->pw_uid,
+-		pwd->pw_gid, pid, CGFLAG_USECACHE);
++		pwd->pw_gid, pid, 0);
+ 	if (ret) {
+ 		if (ctrl & PAM_DEBUG_ARG)
+ 			pam_syslog(pamh, LOG_ERR, "Change of cgroup for process"
