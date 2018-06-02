@@ -4,6 +4,7 @@
 
 Summary: Library to control and monitor control groups
 Name: libcgroup
+Epoch: 1
 Version: 0.41
 Release: 6%{?dist}
 License: LGPLv2+
@@ -35,7 +36,7 @@ administrate and monitor control groups and the associated controllers.
 %package tools
 Summary: Command-line utility programs, services and daemons for libcgroup
 Group: System Environment/Base
-Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description tools
 This package contains command-line programs, services and a daemon for
@@ -44,7 +45,7 @@ manipulating control groups using the libcgroup library.
 %package pam
 Summary: A Pluggable Authentication Module for libcgroup
 Group: System Environment/Base
-Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description pam
 Linux-PAM module, which allows administrators to classify the user's login
@@ -53,7 +54,7 @@ processes to pre-configured control group.
 %package devel
 Summary: Development libraries to develop applications that utilize control groups
 Group: Development/Libraries
-Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description devel
 It provides API to create/delete and modify cgroup nodes. It will also in the
@@ -187,6 +188,9 @@ fi
 %{_libdir}/pkgconfig/libcgroup.pc
 
 %changelog
+* Sat Jun 02 2017 Matt Saladna <matt@apisnetworsk.com> - 1:0.41-6
+- Set epoch to win priority
+
 * Tue Mar 04 2014 jchaloup <jchaloup@redhat.com> - 0.41-6
 - related: #1016810
   specfile corrected, make was not fired
