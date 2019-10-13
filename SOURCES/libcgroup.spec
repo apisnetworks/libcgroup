@@ -4,7 +4,6 @@
 
 Summary: Library to control and monitor control groups
 Name: libcgroup
-Epoch: 1
 Version: 0.41
 Release: 19%{?dist}
 License: LGPLv2+
@@ -32,7 +31,6 @@ Patch13: libcgroup-0.41-fix-log-level.patch
 Patch14: libcgroup-0.41-size-of-controller-values.patch
 Patch15: libcgroup-0.41-CVE-2018-14348.patch
 Patch16: libcgroup-0.41-coverity.patch
-Patch100: apnscp-disable-cache.patch
 
 BuildRequires: gcc, gcc-c++
 BuildRequires: byacc, coreutils, flex, pam-devel, systemd-units
@@ -40,7 +38,6 @@ Requires(pre): shadow-utils
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-Provides: %{name}%{?_isa} = %{version}-%{release}
 
 %description
 Control groups infrastructure. The library helps manipulate, control,
@@ -95,7 +92,6 @@ provide scripts to manage that configuration.
 %patch14 -p1
 %patch15 -p1
 %patch16 -p1
-%patch100 -p1
 
 %build
 %configure --enable-pam-module-dir=%{_libdir}/security \
